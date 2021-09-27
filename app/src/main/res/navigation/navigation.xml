@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/foodSelectFragment"
-        android:name="com.sumit.foodorder.ui.FoodSelectFragment"
+        android:name="com.sumit.foodorder.ui.fragment.FoodSelectFragment"
         android:label="fragment_food_select"
         tools:layout="@layout/fragment_food_select" >
         <action

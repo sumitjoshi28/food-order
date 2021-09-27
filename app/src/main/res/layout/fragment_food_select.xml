@@ -6,8 +6,11 @@
     <data>
 
         <variable
+            name="foodSelectViewModel"
+            type="com.sumit.foodorder.ui.viewmodel.FoodSelectViewModel" />
+        <variable
             name="foodSelect"
-            type="com.sumit.foodorder.ui.FoodSelectFragment" />
+            type="com.sumit.foodorder.ui.fragment.FoodSelectFragment" />
     </data>
 
     <ScrollView
@@ -18,7 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.FoodSelectFragment">
+            tools:context=".ui.fragment.FoodSelectFragment">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_food_menu"

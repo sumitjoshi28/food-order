@@ -1,4 +1,4 @@
-package com.sumit.foodorder.ui
+package com.sumit.foodorder.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
