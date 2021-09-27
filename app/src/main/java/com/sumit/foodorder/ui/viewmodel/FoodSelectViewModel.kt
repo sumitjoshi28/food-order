@@ -9,12 +9,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FoodSelectViewModel (private val repository: FoodItemRepository) : ViewModel() {
+class FoodSelectViewModel(private val repository: FoodItemRepository) : ViewModel() {
 
     // Encapsulating the mutable live data so as not to be changed its value by any fragment.
     private val _totalCount = MutableLiveData<Int>()
-    val totalCount : LiveData<Int>
+    val totalCount: LiveData<Int>
         get() = _totalCount
+
+    private val _totalP = MutableLiveData<Int>()
+    val totalP: LiveData<Int>
+        get() = _totalP
 
     // Methods for event clicks and views
 
@@ -32,7 +36,9 @@ class FoodSelectViewModel (private val repository: FoodItemRepository) : ViewMod
         repository.update(items)
     }
 
-    fun getCount() : LiveData<Int> {
+    // Calculating total count and total price of food.
+
+    fun getCount(): LiveData<Int> {
         var count = 0
         CoroutineScope(Dispatchers.IO).launch {
             val allList = repository.getAllFood()
@@ -43,5 +49,18 @@ class FoodSelectViewModel (private val repository: FoodItemRepository) : ViewMod
             }
         }
         return _totalCount
+    }
+
+    fun getTotalPrice(): LiveData<Int> {
+        var totalPrice = 0
+        CoroutineScope(Dispatchers.IO).launch {
+            val allList = repository.getAllFood()
+
+            for (i in allList.indices) {
+                totalPrice += allList[i].count * allList[i].price
+                _totalP.postValue(totalPrice)
+            }
+        }
+        return _totalP
     }
 }

@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sumit.foodorder.R
@@ -76,10 +77,15 @@ class FoodSelectFragment : Fragment() {
             binding.navigateToNext.text = "VIEW CART (${it.toString()} ITEMS)"
         })
 
+        val totalPrice = viewModel.getTotalPrice().value.toString()
+        viewModel.totalP.observe(viewLifecycleOwner,{
+
+        })
+
         // set listener for view cart button
         binding.navigateToNext.setOnClickListener {
-            NavHostFragment.findNavController(this.requireParentFragment())
-                .navigate(R.id.action_foodSelectFragment_to_foodCartFragment)
+            val bundle = bundleOf("price" to totalPrice)
+            findNavController().navigate(R.id.action_foodSelectFragment_to_foodCartFragment,bundle)
         }
 
         return binding.root

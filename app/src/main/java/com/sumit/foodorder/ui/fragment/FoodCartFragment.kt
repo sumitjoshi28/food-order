@@ -27,6 +27,9 @@ class FoodCartFragment : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        val args = arguments?.getString("price")
+        binding.totalCost.text = "TOTAL COST Rs ${args}"
         return binding.root
     }
 }
