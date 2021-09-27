@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.sumit.foodorder.R
@@ -30,6 +31,10 @@ class FoodCartFragment : Fragment() {
 
         val args = arguments?.getString("price")
         binding.totalCost.text = "TOTAL COST Rs ${args}"
+
+        binding.buttonPlaceOrder.setOnClickListener {
+            Toast.makeText(this.requireContext(),"Your order has been placed !!",Toast.LENGTH_SHORT).show()
+        }
         return binding.root
     }
 }

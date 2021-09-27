@@ -77,9 +77,9 @@ class FoodSelectFragment : Fragment() {
             binding.navigateToNext.text = "VIEW CART (${it.toString()} ITEMS)"
         })
 
-        val totalPrice = viewModel.getTotalPrice().value.toString()
+        var totalPrice = viewModel.getTotalPrice().value.toString()
         viewModel.totalP.observe(viewLifecycleOwner,{
-
+            totalPrice = it.toString()
         })
 
         // set listener for view cart button
@@ -92,11 +92,11 @@ class FoodSelectFragment : Fragment() {
     }
 
     private fun setInitData() {
+        // To avoid creating and saving hardcoded data every time.
         val prefs = activity?.applicationContext?.getSharedPreferences("Flag_Preference", 0)
         val check = prefs?.getBoolean("FLAG", false)
 
         if (check == true) {
-
         } else {
             for (i in 0 until foodItems.size) {
                 viewModel.upsert(foodItems[i])
