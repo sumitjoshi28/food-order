@@ -4,42 +4,44 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sumit.foodorder.data.model.FoodItems
+import com.sumit.foodorder.data.repository.FoodItemRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class FoodSelectViewModel : ViewModel() {
-
-    // set initial data for recycler view items. Hardcoding some data.
-    private var foodItems: ArrayList<FoodItems> = arrayListOf(
-        FoodItems("Chicken Tikka", 250, 0),
-        FoodItems("Matar Paneer", 200, 0),
-        FoodItems("Masala Dosa", 50, 0),
-        FoodItems("Chicken Biryani", 200, 0),
-        FoodItems("Veg Hakka Noodles", 150, 0),
-        FoodItems("Egg Fried Rice", 150, 0),
-    )
+class FoodSelectViewModel (private val repository: FoodItemRepository) : ViewModel() {
 
     // Encapsulating the mutable live data so as not to be changed its value by any fragment.
-    private var _foodSelectList: MutableLiveData<ArrayList<FoodItems>> = MutableLiveData()
-    val foodSelectList : LiveData<ArrayList<FoodItems>>
-        get() = _foodSelectList
+    private val _totalCount = MutableLiveData<Int>()
+    val totalCount : LiveData<Int>
+        get() = _totalCount
 
-    init {
-        _foodSelectList = MutableLiveData()
+    // Methods for event clicks and views
+
+    fun upsert(items: FoodItems) = CoroutineScope(Dispatchers.Main).launch {
+        repository.upsert(items)
     }
 
-    fun getRecyclerListObserver():MutableLiveData<ArrayList<FoodItems>>{
-        return _foodSelectList
+    fun delete(items: FoodItems) = CoroutineScope(Dispatchers.Main).launch {
+        repository.delete(items)
     }
-    // Methods for button clicks
-    fun addButtonClick(position: Int){
-        foodItems[position].count = 1
-        _foodSelectList.postValue(foodItems)
+
+    fun getAllFoodItems() = repository.getAllFoodItems()
+
+    fun update(items: FoodItems) = CoroutineScope(Dispatchers.Main).launch {
+        repository.update(items)
     }
-    fun plusButtonClick(position: Int){
-        foodItems[position].count.plus(1)
-        _foodSelectList.postValue(foodItems)
-    }
-    fun minusButtonClick(position: Int){
-        foodItems[position].count.minus(1)
-        _foodSelectList.postValue(foodItems)
+
+    fun getCount() : LiveData<Int> {
+        var count = 0
+        CoroutineScope(Dispatchers.IO).launch {
+            val allList = repository.getAllFood()
+
+            for (i in allList.indices) {
+                count += allList[i].count
+                _totalCount.postValue(count)
+            }
+        }
+        return _totalCount
     }
 }

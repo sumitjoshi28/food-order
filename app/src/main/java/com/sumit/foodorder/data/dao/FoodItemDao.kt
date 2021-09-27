@@ -14,4 +14,11 @@ interface FoodItemDao {
 
     @Query("SELECT * FROM food_items")
     fun getAllFoodItems() : LiveData<List<FoodItems>>
+
+    @Update
+    suspend fun update(item: FoodItems)
+
+    @Query("SELECT * FROM food_items")
+    fun getAllFood() : List<FoodItems>
+
 }

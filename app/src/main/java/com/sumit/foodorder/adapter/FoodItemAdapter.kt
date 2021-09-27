@@ -1,14 +1,14 @@
 package com.sumit.foodorder.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.sumit.foodorder.data.model.FoodItems
 import com.sumit.foodorder.databinding.FoodItemsBinding
+import com.sumit.foodorder.ui.viewmodel.FoodSelectViewModel
 
-class FoodItemAdapter(private var items: ArrayList<FoodItems>, val listener: ItemClickAdapter) :
+class FoodItemAdapter(var items: ArrayList<FoodItems>, val viewModel: FoodSelectViewModel) :
     RecyclerView.Adapter<FoodItemAdapter.ViewHolderFoodItems>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderFoodItems {
@@ -22,16 +22,13 @@ class FoodItemAdapter(private var items: ArrayList<FoodItems>, val listener: Ite
     }
 
     override fun onBindViewHolder(holder: ViewHolderFoodItems, position: Int) {
-        holder.bind(items[position])
+        val currentItem = items[position]
+        holder.bind(currentItem)
     }
 
-//    fun updateList(newList:ArrayList<FoodItems>){
-//        items.clear()
-//        items.addAll(newList)
-//    }
-
+    // update recyclerview data using diff util class.
     fun setData(newFoodList: ArrayList<FoodItems>) {
-        val diffUtil = DiffCallback(items,newFoodList)
+        val diffUtil = DiffCallback(items, newFoodList)
         val diffResults = DiffUtil.calculateDiff(diffUtil)
         items = newFoodList
         diffResults.dispatchUpdatesTo(this)
@@ -40,34 +37,36 @@ class FoodItemAdapter(private var items: ArrayList<FoodItems>, val listener: Ite
     inner class ViewHolderFoodItems(private val binding: FoodItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(items: FoodItems) {
-            binding.listItem = items
+        fun bind(currentItem: FoodItems) {
+            // data binding to the xml
+            binding.listItem = currentItem
             binding.executePendingBindings()
 
-            binding.count.text = items.count.toString()
+            binding.addItem.setOnClickListener {
+                if (currentItem.count <= 19) {
+                    currentItem.count++
 
-            binding.addItemBtn.setOnClickListener {
-                if (items.count >= 1) {
-                    binding.addItem.visibility = View.VISIBLE
-                    binding.count.visibility = View.VISIBLE
-                    binding.removeItem.visibility = View.VISIBLE
-                    binding.addItemBtn.visibility = View.GONE
-                }else {
-                    binding.addItem.visibility = View.GONE
-                    binding.count.visibility = View.GONE
-                    binding.removeItem.visibility = View.GONE
-                    binding.addItemBtn.visibility = View.VISIBLE
+                    viewModel.update(currentItem)
+                    notifyDataSetChanged()
                 }
-                listener.onItemClicked(items,adapterPosition)
+            }
+
+            binding.removeItem.setOnClickListener {
+                if (currentItem.count > 0) {
+                    currentItem.count--
+                    viewModel.update(currentItem)
+                    notifyDataSetChanged()
+                }
             }
         }
     }
 }
 
-class DiffCallback (
+// New improved way of updating recycler view data,later can be implemented.
+class DiffCallback(
     private val oldList: List<FoodItems>,
     private val newList: List<FoodItems>
-        ) : DiffUtil.Callback() {
+) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return oldList.size
@@ -85,15 +84,10 @@ class DiffCallback (
         return when {
             oldList[oldItemPosition].count != newList[newItemPosition].count -> {
                 false
-            }else -> {
+            }
+            else -> {
                 true
             }
         }
     }
-
-
-}
-
-interface ItemClickAdapter {
-    fun onItemClicked(foodItem: FoodItems,itemPosition:Int)
 }

@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/foodCartFragment"
-        android:name="com.sumit.foodorder.ui.FoodCartFragment"
+        android:name="com.sumit.foodorder.ui.fragment.FoodCartFragment"
         android:label="fragment_food_cart"
         tools:layout="@layout/fragment_food_cart" >
         <action

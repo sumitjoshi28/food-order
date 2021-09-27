@@ -41,22 +41,22 @@
 
         <ImageView
             android:id="@+id/add_item"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginTop="12dp"
             android:src="@drawable/ic_add"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/remove_item"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_minus"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toStartOf="@+id/count"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,23 +64,13 @@
             android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="48dp"
             android:text="@{Integer.toString(listItem.count)}"
             android:textSize="12sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/add_item"
-            app:layout_constraintTop_toTopOf="parent" />
-        <Button
-            android:id="@+id/add_item_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_food"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="@+id/add_item"
-            app:layout_constraintTop_toTopOf="parent" >
-
-        </Button>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:layout_width="match_parent"
